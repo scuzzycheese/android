@@ -7,6 +7,7 @@ import com.reverseorder.crimetracker.R;
 import com.reverseorder.crimetracker.structures.RowMeta;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,7 +20,6 @@ public class MainActivity extends Activity {
 
 	private static final String TAG = MainActivity.class.toString();
 	private static int counter = 0;
-	private static EventRowHandler eventRowHandler = new EventRowHandler();
 	private List<RowMeta> rows = new ArrayList<RowMeta>();
 	
 	
@@ -58,17 +58,24 @@ public class MainActivity extends Activity {
     private void addRow()
     {
     	Log.w(TAG, "Creating Event!!!");
-        TableLayout eventsTable = (TableLayout) findViewById(R.id.events_table);
-
+    	
+    	Resources res = getResources();
     	RowMeta rowMeta = new RowMeta("New Event: " + counter, false);
+    	EventRowHandler eventRowHandler = new EventRowHandler(this, rowMeta);
+    	
+    	
+    	int rowHeight = res.getInteger(R.integer.row_height);
+    	
+        TableLayout eventsTable = (TableLayout)findViewById(R.id.events_table);
+
+    	
         
     	TableRow row = new TableRow(this);
     	
     	row.setPadding(10, 5, 5, 10);
     	row.setClickable(true);
     	row.setOnClickListener(eventRowHandler);
-    	row.setMinimumHeight(100);
-    	row.setTag(rowMeta);
+    	row.setMinimumHeight(rowHeight);
     	
     	TextView text = new TextView(this);
     	text.setText(rowMeta.getRowText());

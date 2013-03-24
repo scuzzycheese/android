@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer name="row_height">100</integer>
+    <color name="row_highlighted">#FF89CFFD</color>
+    <color name="row_unhighlighted">#00000000</color>
+    <integer name="calling_activity_id">0</integer>
+    <integer name="row_meta_id">1</integer>
+    
+</resources>
