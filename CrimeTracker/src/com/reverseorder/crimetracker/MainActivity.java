@@ -7,6 +7,7 @@ import com.reverseorder.crimetracker.R;
 import com.reverseorder.crimetracker.structures.RowMeta;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +17,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity 
+{
 
 	private static final String TAG = MainActivity.class.toString();
 	private static int counter = 0;
@@ -25,11 +27,14 @@ public class MainActivity extends Activity {
 	
 	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        	
+        Intent mServiceIntent = new Intent(this, CrimeTrackerService.class);
+        mServiceIntent.putExtra("TestDataKey", "TestDataValue");
+        startService(mServiceIntent);
     }
 
 

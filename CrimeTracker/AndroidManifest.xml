@@ -30,6 +30,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.reverseorder.crimetracker.MainActivity" />
         </activity>
+        
+        <service
+            android:name="com.reverseorder.crimetracker.CrimeTrackerService"
+            android:exported="false" >
+        </service>
+            
     </application>
 
 </manifest>
