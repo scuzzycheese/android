@@ -2,7 +2,11 @@ package com.reverseorder.crimetracker;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
 
@@ -34,11 +38,14 @@ public class CrimeTrackerService extends Service
 	}
 
 
+	
+	
+	
+	
 	@Override
 	public IBinder onBind(Intent intent) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return mMessenger.getBinder();
 	}
 	
 	@Override
@@ -47,4 +54,34 @@ public class CrimeTrackerService extends Service
 		Log.w(TAG, "CrimeTracker Server finished.");
 	}
 
+	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	
+    /**
+     * Handler of incoming messages from clients.
+     */
+    private static class IncomingHandler extends Handler 
+    {
+        @Override
+        public void handleMessage(Message msg) 
+        {
+        	
+            switch (msg.what) 
+            {
+                case 1:
+                	Log.w(TAG, "Got Message from crimeTracker activity!");
+                	try 
+                	{
+                		msg.replyTo.send(Message.obtain(null, 2, 0, 0));
+                	}
+                	catch(RemoteException e)
+                	{
+                		Log.e(TAG, "Error responding to crimeTracker activity.", e);
+                	}
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+	
 }
