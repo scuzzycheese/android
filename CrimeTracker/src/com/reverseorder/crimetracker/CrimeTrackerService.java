@@ -1,7 +1,9 @@
 package com.reverseorder.crimetracker;
 
 import com.reverseorder.crimetracker.common.MessageClass;
+import com.reverseorder.crimetracker.common.MessageSource;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -15,6 +17,7 @@ import android.util.Log;
 public class CrimeTrackerService extends Service 
 {
 	private static final String TAG = CrimeTrackerService.class.toString();
+	private Message mainActivityMessanger = null;
 
 	  
 	@Override
@@ -60,13 +63,20 @@ public class CrimeTrackerService extends Service
 	
     /**
      * Handler of incoming messages from clients.
+     * I don't think this will ever leak because it's parent class (the service)
+     * will never be discarded. (I could be wrong tho)
      */
-    private static class IncomingHandler extends Handler 
+    @SuppressLint("HandlerLeak") 
+    private class IncomingHandler extends Handler 
     {
+    	public IncomingHandler()
+    	{
+    		Log.w(TAG, "Instantiating IncomingHandler");
+    	}
+    	
         @Override
         public void handleMessage(Message msg) 
         {
-        	
             switch(MessageClass.fromInt(msg.what)) 
             {
                 case Hello:
@@ -74,6 +84,10 @@ public class CrimeTrackerService extends Service
                 	Log.w(TAG, "Got Message from crimeTracker activity!");
                 	try 
                 	{
+                		if(msg.arg1 == MessageSource.MainActivity.toInt())
+                		{
+                			mainActivityMessanger = msg;
+                		}
                 		Log.w(TAG, (String)msg.obj);
                 		msg.replyTo.send(Message.obtain(null, MessageClass.Hello.toInt(), 0, 0));
                 	}
