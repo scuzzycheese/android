@@ -1,5 +1,7 @@
 package com.reverseorder.crimetracker;
 
+import com.reverseorder.crimetracker.common.MessageClass;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -12,7 +14,7 @@ import android.util.Log;
 
 public class CrimeTrackerService extends Service 
 {
-	private static final String TAG = EventRowHandler.class.toString();
+	private static final String TAG = CrimeTrackerService.class.toString();
 
 	  
 	@Override
@@ -65,21 +67,27 @@ public class CrimeTrackerService extends Service
         public void handleMessage(Message msg) 
         {
         	
-            switch (msg.what) 
+            switch(MessageClass.fromInt(msg.what)) 
             {
-                case 1:
+                case Hello:
+                {
                 	Log.w(TAG, "Got Message from crimeTracker activity!");
                 	try 
                 	{
-                		msg.replyTo.send(Message.obtain(null, 2, 0, 0));
+                		Log.w(TAG, (String)msg.obj);
+                		msg.replyTo.send(Message.obtain(null, MessageClass.Hello.toInt(), 0, 0));
                 	}
                 	catch(RemoteException e)
                 	{
                 		Log.e(TAG, "Error responding to crimeTracker activity.", e);
                 	}
                     break;
+                }
+                case Unknown:
                 default:
+                {
                     super.handleMessage(msg);
+                }
             }
         }
     }

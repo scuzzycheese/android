@@ -1,7 +1,9 @@
 package com.reverseorder.crimetracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -22,6 +24,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.reverseorder.crimetracker.common.MessageClass;
+import com.reverseorder.crimetracker.common.MessageSource;
 import com.reverseorder.crimetracker.structures.RowMeta;
 
 public class MainActivity extends Activity 
@@ -124,8 +128,12 @@ public class MainActivity extends Activity
     	eventsTable.addView(spacer);
     	
     	//Testing out some messenger stuff!
-    	Message msg = Message.obtain(null, 1, 0, 0);
+    	Message msg = Message.obtain(null, MessageClass.Hello.toInt(), MessageSource.MainActivity.toInt(), 0);
     	msg.replyTo = crimeTrackerInputMessenger;
+    	
+    	String sampleString = "Hello, this is a test String from the mainActivity!";
+    	msg.obj = sampleString;
+    	
     	try 
     	{
 			crimeTrackerOutputMessenger.send(msg);
@@ -188,16 +196,19 @@ public class MainActivity extends Activity
         @Override
         public void handleMessage(Message msg) 
         {
-        	
-            switch (msg.what) 
-            {
-                case 2:
-                	Log.w(TAG, "Got Response from crimeTrackerService!");
-                    break;
-                default:
-                    super.handleMessage(msg);
-            }
+        	switch(MessageClass.fromInt(msg.what))
+        	{
+        		case Hello: 
+        		{
+        			Log.w(TAG, "Got Response from crimeTrackerService!");
+        			break;
+        		}
+        		case Unknown: 
+        		default:
+        		{
+        			super.handleMessage(msg);
+        		}
+        	};
         }
     }
-    
 }

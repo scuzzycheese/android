@@ -42,7 +42,7 @@ public class EventRowHandler implements OnClickListener
 	    Intent intent = new Intent(callingActivity, EventDetailsActivity.class);
 	    callingActivity.startActivity(intent);
 	    
-	    //Sneaky way to un highlight the row
+	    //Sneaky way to run highlight the row
 	    handler.postDelayed(unHighlightRow, res.getInteger(R.integer.unhighlight_after_ms));
 	}
 	
